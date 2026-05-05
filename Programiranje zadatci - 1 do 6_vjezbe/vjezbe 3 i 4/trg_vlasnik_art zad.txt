@@ -1,0 +1,127 @@
+#include <iostream>
+#include <string>
+#include <vector>
+
+using namespace std;
+
+
+
+namespace Proizvod {
+	class Artikl {
+	private:
+		string naziv;
+		double jedinicnaCijena;
+
+	public:
+		void setNaziv(string _naziv);
+		string getNaziv() const;
+		void setjedinicnaCijena(double _jedinicnaCijena);
+		double getjedinicnaCijena() const;
+	};
+
+
+	void Artikl::setjedinicnaCijena(double _jedinicnaCijena) {
+		if (_jedinicnaCijena < 0.1) {
+			jedinicnaCijena = 0.1;
+		}
+		else {
+			jedinicnaCijena = _jedinicnaCijena;
+		}
+	}
+
+	double Artikl::getjedinicnaCijena() const {
+		return jedinicnaCijena;
+	}
+
+	string Artikl::getNaziv() const {
+		return naziv;
+	}
+
+}
+
+void Proizvod::Artikl::setNaziv(string _naziv) {
+	naziv = _naziv;
+}
+
+class Vlasnik {
+public:
+	string ime;
+	string prezime;
+	string adresa;
+
+
+	Vlasnik() {};
+	Vlasnik(string _ime, string _prezime, string _adresa) : ime(_ime), prezime(_prezime), adresa(_adresa) {};
+
+	string getIme() const {
+		return ime;
+	}
+
+	string getPrezime() const {
+		return prezime;
+	}
+
+	string getAdresa() const {
+		return adresa;
+	}
+
+
+};
+
+class Trgovina {
+public:
+	string naziv;
+	string adresa;
+	Vlasnik vlasnik;
+	vector<Proizvod::Artikl*> artikli;
+
+	Trgovina() {};
+	Trgovina(string _naziv, string _adresa, Vlasnik _vlasnik) : naziv(_naziv), adresa(_adresa), vlasnik(_vlasnik) {};
+
+	Trgovina(Trgovina& a) {
+		for (int i = 0; i < a.artikli.size(); i++) {
+			artikli.push_back(new Proizvod::Artikl);
+			*artikli[i] = *a.artikli[i];
+		}
+
+		cout << "kopirni konstruktor" << endl;
+
+	}
+
+	Trgovina& operator = (Trgovina&& a) {
+		
+			for (int i = 0; i < artikli.size(); i++)
+				delete artikli[i];
+			artikli.clear();
+			for (int i = 0; i < a.artikli.size(); i++) {
+				artikli.push_back(a.artikli[i]);
+				a.artikli[i] = NULL;
+			}
+
+			return *this;
+		
+	}
+
+	Trgovina& dodajArtikl(Proizvod::Artikl* novi_artikl) {
+		artikli.push_back(novi_artikl);
+		return *this;
+	}
+
+
+	~Trgovina() {
+		for (int i = 0; artikli.size(); i++)
+			delete artikli[i];
+	}
+};
+
+int main() {
+	
+	using namespace Proizvod;
+	
+	Artikl artikl1, artikl2;
+	artikl1.setNaziv("paprika");
+	artikl2.setNaziv("banana");
+
+	Trgovina t1;
+	t1.dodajArtikl(&artikl1).dodajArtikl(&artikl2);
+}

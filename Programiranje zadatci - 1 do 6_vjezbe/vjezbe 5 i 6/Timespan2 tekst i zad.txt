@@ -1,0 +1,112 @@
+Napravite klasu TimeSpan koja mjeri protok vremena u satima, minutama i sekundama.
+Dodajte potrebne operatore (+, --) kako bi kod funkcionirao prema očekivanju.
+
+
+int main()
+{
+TimeSpan a(1, 0, 0);
+a = a + 10;
+cout << a;  //1:0:10
+a = 65 + a;
+cout << a; //1:1:15
+
+for(int i = 0; i < 60 * 60 + 74; i++)
+a--;
+
+cout << a; //0:0:1
+
+a--;
+a--;
+
+cout << a; //0:0:0
+
+return 0;
+}
+
+
+
+Rješenje:
+
+#include<iostream>
+
+using namespace std;
+
+class TimeSpan {
+private:
+	int sat, min, sek;
+
+public:
+
+	TimeSpan(int _sat, int _min, int _sek) : sat(_sat), min(_min), sek(_sek) {}
+	friend ostream& operator << (ostream& izlaz, TimeSpan x);
+	friend TimeSpan operator + (int x, TimeSpan y);
+
+	TimeSpan operator + (int x) {
+		sek += x;
+		if (sek >= 60) {
+			min += sek / 60;
+			sek = sek % 60;
+		}
+		if (min >= 60) {
+			sat += min / 60;
+			min = min % 60;
+		}
+		return TimeSpan(sat, min, sek);
+	}
+
+	TimeSpan operator -- (int) {
+		TimeSpan pom = *this;
+		if (sek > 0) {
+			sek--;
+		}
+		else if (min > 0) {
+			min--;
+			sek = 59;
+		}
+		else if(sat >= 0) {
+			sat--;
+			sek = 59;
+			min = 59;
+		}
+		return pom;
+	}
+};
+
+ostream& operator << (ostream& izlaz, TimeSpan x) {
+	izlaz << x.sat << ":" << x.min << ":" << x.sek << endl;
+	return izlaz;
+}
+
+TimeSpan operator + (int x, TimeSpan y) {
+	y.sek += x;
+	if (y.sek >= 60) {
+		y.min += y.sek / 60;
+		y.sek = y.sek % 60;
+	}
+	if (y.min >= 60) {
+		y.sat += y.min / 60;
+		y.min = y.min % 60;
+	}
+	return TimeSpan(y.sat, y.min, y.sek);
+}
+
+int main()
+{
+	TimeSpan a(1, 0, 0);
+	a = a + 10;
+	cout << a;  //1:0:10
+	a = 65 + a;
+	cout << a; //1:1:15
+
+	for (int i = 0; i < 60 * 60 + 74; i++)
+		a--;
+
+	cout << a; //0:0:1
+
+	a--;
+	a--;
+
+	cout << a; //0:0:0
+
+	return 0;
+}

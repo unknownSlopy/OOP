@@ -1,0 +1,171 @@
+Deklarirajte klasu 'KompleksniVektor' koja predstavlja vektor kompleksih brojeva(deklarirati klasu Kompleksni) čiji su elementi smješteni u privatnom dijeli klase. Zatim, realizirajte sljedeće:
+
+a) U funkciji main ispišite koliko 'živih' instanci objekta tipa Kompleksni pozivom metode 'brojac' na sljedeći način :
+cout<< Kompleksni::brojac()<<endl;
+Brojač se povećava za vrijednosti 1 svaki put kada se kreira novi objekat tipa Kompleksni, te se smanjuje za vrijednost 1 svaki put kada se objekat tog tipa uništi
+
+b)U klasi KompleksniVektor deklarirajte metodu GetElement koja kao parametar ima indeks tj. cijeli broj. Ukoliko je indeks negativan broj metoda mora baciti iznimku tipa 'KompleksniVektorException', a u protivnom potrebno je vratiti kompleksni broj koji se nalazi u traženom elementu vektora. Metodu GetElement implementirajte van klase, a u funkciji main demonstrirajte njen poziv gdje se prilikom hvatanja iznimke treba izvršiti metoda 'ispis' klase 'KompleksniVektorException' koja će ispisati odgovarajuću poruku korisniku.
+
+c)Implementirajte operaciju usporedbe dva objekta tipa KompleksniVektor kao nečlansku operatorsku funkciju koja kao rezultat vraća novi vektor samo sa onim elementima koji su jednaki u oba objekta. Demonstrirajte poziv operatora u funkciji main. Elementi vektora klase KompleksniVektor moraju ostati privatni. 
+
+d)Implementirajte prefiks i postfiks operatore unutar klase KompleksniVektor. Oba operatora trebaju uvećati sve kompleksne brojeve unutra vektora za vrijednost 1.
+
+e)Preopteretite operator '<<' za ispis svih kompleksnih brojva unutar objekta tipa KompleksniVektor, te operator '>>' kojim se učitani kompleskni broj dodaje tom vektoru.
+
+#include <iostream>
+#include <vector>
+
+using namespace std;
+
+class Kompleksni {
+private:
+	double re, im;
+
+public:
+	static int br;
+	Kompleksni(double _re, double _im) : re(_re), im(_im) {
+		br++;
+	}
+	
+	Kompleksni() {
+		br++;
+	}
+
+	Kompleksni(const Kompleksni& other) : re(other.re), im(other.im) {
+		br++;
+	}
+	~Kompleksni() {
+		br--;
+	}
+	static int brojac() {
+		return br;
+	}
+
+	friend class KompleksniVektor;
+	friend ostream& operator << (ostream& izlaz, Kompleksni z);
+	friend istream& operator >>(istream& ulaz, Kompleksni z);
+	
+	Kompleksni& operator ++() {
+		++re;
+		++im;
+		return *this;
+	}
+
+	Kompleksni operator ++(int) {
+		Kompleksni pom = *this;
+		re++;
+		im++;
+		return pom;
+	}
+
+};
+int Kompleksni::br = 0;
+
+
+class KompleksniVektorException : public exception{
+public:
+	const char* ispis() const noexcept {
+		return "Indeks je negativan, nemere!";
+	}
+};
+
+ostream& operator << (ostream& izlaz, Kompleksni z) {
+	izlaz << z.re << " + " << z.im << "i";
+	return izlaz;
+}
+
+istream& operator >>(istream& ulaz, Kompleksni z) {
+	ulaz >> z.re >> z.im;
+	return ulaz;
+}
+
+class KompleksniVektor {
+private:
+	vector<Kompleksni> kompleksni_vektor;
+
+public:
+	friend ostream& operator <<(ostream& izlaz, KompleksniVektor vektor);
+	friend Kompleksni GetElement(const KompleksniVektor& kompleksni, int indeks);
+	// friend KompleksniVektor operator ==(KompleksniVektor vektor1, KompleksniVektor vektor2);
+	
+	void dodaj(const Kompleksni& kompleksni) {
+		 kompleksni_vektor.push_back(kompleksni);
+	 }
+
+	 KompleksniVektor operator ++() {
+		 for (auto& kompleksni : kompleksni_vektor) {
+			 ++kompleksni;
+		 }
+		 return *this;
+	 }
+
+	 KompleksniVektor operator ++(int) {
+		 KompleksniVektor pom = *this;
+		 ++(*this);
+		 return pom;
+	 }
+};
+
+Kompleksni GetElement(const KompleksniVektor& kompleksni, int indeks) {
+	if (indeks < 0) {
+		throw KompleksniVektorException();
+	}
+	kompleksni.kompleksni_vektor.at(indeks);
+}
+
+
+//KompleksniVektor operator ==(KompleksniVektor vektor1, KompleksniVektor vektor2) {
+//	KompleksniVektor rez;
+//	for (size_t i = 0; i < min(vektor1.kompleksni_vektor.size(), vektor2.kompleksni_vektor.size()); i++) {
+//		if (vektor1.kompleksni_vektor[i].re == vektor2.kompleksni_vektor[i]) {
+//			rez.dodaj(vektor1.kompleksni_vektor[i]);
+//		}
+//	}
+//	return rez;
+//}
+
+ostream& operator <<(ostream& izlaz, KompleksniVektor vektor) {
+	for (const auto& kompleksni : vektor.kompleksni_vektor) {
+		izlaz << kompleksni << " ";
+	}
+	return izlaz;
+}
+
+istream& operator >>(istream& ulaz, KompleksniVektor vektor) {
+	Kompleksni z;
+	ulaz >> z;
+	vektor.dodaj(z);
+	return ulaz;
+}
+
+int main() {
+	
+	cout << Kompleksni::brojac() << endl;
+
+	KompleksniVektor vektor;
+	//vektor.dodajElement(Kompleksni());
+
+	try {
+		Kompleksni element = GetElement(vektor, -1);
+	}
+	catch (const KompleksniVektorException& e) {
+		cout << e.ispis() << endl;
+	}
+
+	KompleksniVektor vektor1, vektor2;
+	vektor1.dodaj(Kompleksni(1.0, 2.0));
+	vektor1.dodaj(Kompleksni(3.0, 4.0));
+	vektor1.dodaj(Kompleksni(5.0, 6.0));
+
+	vektor2.dodaj(Kompleksni(1.0, 2.0));
+	vektor2.dodaj(Kompleksni(3.0, 4.0));
+	vektor2.dodaj(Kompleksni(7.0, 8.0));
+
+	++vektor1;
+	KompleksniVektor kopija = vektor1++;
+
+	cout << vektor1 << endl;
+
+
+	return 0;
+}

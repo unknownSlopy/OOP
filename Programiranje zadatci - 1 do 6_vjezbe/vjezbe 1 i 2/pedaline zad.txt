@@ -1,0 +1,77 @@
+#include<iostream>
+#include<algorithm>
+#include<string>
+#include<vector>
+using namespace std;
+
+class Pedalina {
+public:
+	string boja;
+	int kapacitet;
+
+	Pedalina(string _boja, int _kapacitet ) : boja(_boja), kapacitet(_kapacitet) {}
+};
+
+class Lokacija {
+public:
+
+	string ime;
+	string prezime;
+	double x;
+	double y;
+	vector<Pedalina> vPedaline;
+
+	Lokacija (string _ime, string _prezime, double _x, double _y) : ime(_ime), prezime(_prezime),
+		x(_x), y(_y) {}
+
+	void ispisiPedaline() {
+		for (int i = 0; i < vPedaline.size(); i++) {
+			cout << vPedaline[i].boja << " " << vPedaline[i].kapacitet << endl;
+		}
+	}
+};
+
+int main() {
+
+	vector<Lokacija> vLokacije;
+	int brojLokacija;
+	cout << "Unesite broj lokacija (N):2 " << endl;
+	cin >> brojLokacija;
+	vLokacije.reserve(brojLokacija);
+
+	for (int i = 0; i < brojLokacija; i++) {
+		string ime, prezime;
+		double x, y;
+		cout << "Unesite odgovornu osobu i GPS koordinate za " << i+1 << "." << "lokaciju: " << endl;
+		cin >> ime >> prezime;
+		cin >> x >> y;
+
+		vLokacije.push_back(Lokacija(ime, prezime, x, y));
+	}
+
+	int brojPedaline;
+	cout << "Unesite broj pedaline (M):1" << endl;
+	cin >> brojPedaline;
+	int redniBroj;
+	cout << "Unesite redni broj lokacije kojoj pripada 1. pedalina: " << endl;
+	cin >> redniBroj;
+
+	cout << "Unesite boju i kapacitet pedaline: " << endl;
+	
+	string boja;
+	int kapacitet;
+	cin >> boja >> kapacitet;
+
+	vLokacije[redniBroj - 1].vPedaline.push_back(Pedalina(boja, kapacitet));
+
+	cout << "Ispis lokacija i pedalina: " << endl;
+	for (int i = 0; i < vLokacije.size(); i++) {
+		cout << i + 1 << vLokacije[i].x << " " << vLokacije[i].y << " " <<
+			vLokacije[i].ime << " " << vLokacije[i].prezime << " - pedaline: ";
+
+		vLokacije[i].ispisiPedaline();
+		cout << endl;
+
+	}
+
+}

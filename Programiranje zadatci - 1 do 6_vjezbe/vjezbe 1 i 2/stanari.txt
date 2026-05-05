@@ -1,0 +1,74 @@
+Zgrada sadrži niz stanova, gdje se u svakom stanu nalazi niz stanara. Svaka zgrada ima i svoju adresu, a svaki stan svoj broj. Svaki stanar ima svoje ime i podatak o starosti (broj godina). 
+- U klasi 'Stan' deklarirajte metodu 'DodajStanara’ te njeno tijelo implementirajte van klase. Sljedeći poziv metode mora ispravno raditi:
+
+vector<Stanar> stanari = { Stanar("Ante", 30), Stanar("Ivica", 25) };
+<proizvoljni_stan_objekt>.DodajStanara(stanari);
+
+- Implementirajte funkciju 'AnalizaZgrada' tipa void koja za predani niz zgrada vraća broj stanova u kojima žive samci, te starost najstarijeg stanara u tim zgradama.
+
+
+
+Rješenje:
+
+#include <iostream>
+#include <vector>
+#include<string>
+using namespace std;
+
+class Stanar {
+public:
+    string ime;
+    int starost;
+    Stanar(string _ime, int _starost) : ime(_ime), starost(_starost) {}
+
+};
+
+class Stan {
+public:
+    vector<Stanar> vStanar;
+    int broj;
+    void DodajStanara(vector<Stanar> _vStanar);
+};
+
+void Stan::DodajStanara(vector<Stanar> _vStanar) {
+    for (int i = 0; i < _vStanar.size(); i++) {
+        vStanar.push_back(_vStanar[i]);
+    }
+}
+
+class Zgrada {
+public:
+    vector<Stan> vStan;
+    string adresa;
+    
+};
+
+void AnalizaZgrada(vector<Zgrada> vZgrada, int* samci, int* najstariji) {
+    *samci = 0;
+    *najstariji = 0;
+    for (int i = 0; i < vZgrada.size(); i++) {
+        for (int j = 0; vZgrada[i].vStan.size(); j++) {
+            if (vZgrada[i].vStan[j].vStanar.size() == 1)
+                (*samci)++;
+            for (int k = 0; k < vZgrada[i].vStan[j].vStanar.size(); k++) {
+                if (vZgrada[i].vStan[j].vStanar[k].starost > *najstariji)
+                    *najstariji = vZgrada[i].vStan[j].vStanar[k].starost;
+            }
+        }
+    }
+}
+
+int main() {
+    Stan S;
+    Zgrada Z;
+    vector<Stanar> stanari = { Stanar("Ante", 30), Stanar("Ivica", 25) };
+    S.DodajStanara(stanari);
+
+    vector<Zgrada> zgrade;
+    int samci;
+    int najstariji;
+    AnalizaZgrada(zgrade, &samci, &najstariji);
+
+    cout << samci << " " << najstariji << endl;
+    return 0;
+}

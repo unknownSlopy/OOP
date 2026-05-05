@@ -1,0 +1,99 @@
+#include <iostream>
+#include<vector>
+#include<algorithm>
+
+using namespace std;
+
+class Cigla {
+
+public:
+
+	int dim_a, dim_b, dim_c;
+
+    Cigla(int _dim_a, int _dim_b, int _dim_c) {
+        dim_a = _dim_a;
+        dim_b = _dim_b;
+        dim_c = _dim_c;
+    }
+
+	Cigla& operator+=(const Cigla& c) {
+		vector<int> holder_this;
+		holder_this.push_back(this->dim_a);
+		holder_this.push_back(this->dim_b);
+		holder_this.push_back(this->dim_c);
+
+		vector<int> holder_c;
+		holder_c.push_back(c.dim_a);
+		holder_c.push_back(c.dim_b);
+		holder_c.push_back(c.dim_c);
+
+		vector<int> dimenzije;
+
+		for (int i = 0; i < holder_this.size(); i++) {
+			if (find(holder_c.begin(), holder_c.end(), holder_this[i]) == holder_c.end()) {
+				dimenzije.push_back(holder_this[i]);
+			}
+		}
+
+		for (int i = 0; i < holder_c.size(); i++) {
+			if (find(holder_this.begin(), holder_this.end(), holder_c[i]) == holder_this.end()) {
+				dimenzije.push_back(holder_c[i]);
+			}
+		}
+
+		for (int i = 0; i < dimenzije.size(); i++) {
+			if (dimenzije[i] == this->dim_a)
+			{
+				this->dim_a += dimenzije[i + 1];
+				break;
+			}
+			else if (dimenzije[i] == this->dim_b)
+			{
+				this->dim_b += dimenzije[i + 1];
+				break;
+			}
+			else if (dimenzije[i] == this->dim_c)
+			{
+				this->dim_c += dimenzije[i + 1];
+				break;
+			}
+
+		}
+
+		return *this;
+	}
+
+	Cigla operator --(int) {
+		Cigla pom = *this;
+		if (dim_a > 0) dim_a--;
+		if (dim_b > 0) dim_b--;
+		if (dim_c > 0) dim_c--;
+		return pom;
+	}
+};
+
+ostream& operator << (ostream& izlaz, Cigla cigla) {
+	izlaz << cigla.dim_a << " x " << cigla.dim_b << " x " << cigla.dim_c << "\n";
+	return izlaz;
+}
+
+int main() {
+
+    Cigla a(1, 2, 3);
+    Cigla b(2, 3, 4);
+
+    a += b;
+    std::cout << a << std::endl; // 3 x 2 x 3
+
+    a += Cigla(3, 5, 1);
+    std::cout << a << std::endl; // 6 x 3 x 3
+
+    a += Cigla(3, 3, 2);
+    std::cout << a << std::endl; // 9 x 3 x 3
+
+    a--;
+    a--;
+    std::cout << a << std::endl; // 7 x 1 x 1
+
+    return 0;
+}

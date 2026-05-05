@@ -1,0 +1,46 @@
+#include<iostream>
+#include<string>
+
+using namespace std;
+
+class PrevelikBroj {
+public:
+    string poruka() const {
+        return "prevelik broj";
+    }
+};
+
+class PremaliBroj {
+public:
+    string poruka() const {
+        return "premali broj";
+    }
+};
+
+void test(int broj) {
+    cout << "pocetak testa" << endl;
+
+    if (broj > 1)
+        throw PrevelikBroj();
+
+    if (broj < 0)
+        throw PremaliBroj();
+}
+
+int main() {
+    try {
+        test(2);
+        cout << "nastavak try-bloka...\n";
+    }
+    catch (const PrevelikBroj& e) {
+        cout << e.poruka() << endl;
+    }
+    catch (const PremaliBroj& e) {
+        cout << e.poruka() << endl;
+    }
+    catch (...) {
+        cout << "... neka druga greska!";
+    }
+
+    cout << "nastavak main funkcije\n";
+}

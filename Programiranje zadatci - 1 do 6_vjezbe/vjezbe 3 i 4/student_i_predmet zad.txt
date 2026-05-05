@@ -1,0 +1,123 @@
+#include <iostream>
+#include <string>
+#include <vector>
+
+using namespace std;
+
+class Predmet {
+private:
+	string sifra;
+	string naziv;
+	int ocjena = 0;
+
+
+public:
+	void setOcjena(int _ocjena) {
+		if (_ocjena >= 1 && _ocjena <= 5) {
+			ocjena = _ocjena;
+		}
+	}
+
+	int getOcjena() const {
+		return ocjena;
+	}
+
+	void setSifra(string _sifra) {
+		sifra = _sifra;
+	}
+
+	string getSifra() const {
+		return sifra;
+	}
+
+	void setNaziv(string _naziv) {
+		naziv = _naziv;
+	}
+
+	string getNaziv() const {
+		return naziv;
+	}
+
+
+
+};
+
+
+class Student {
+public:
+	string ime;
+	string prezime;
+	vector<Predmet*> predmeti;
+
+	Student() {};
+	Student(string _ime, string _prezime) : ime(_ime), prezime(_prezime) {};
+
+	Student(const Student& p) {
+		for (int i = 0; i < p.predmeti.size(); i++) {
+			predmeti.push_back(new Predmet);
+			*predmeti[i] = *p.predmeti[i];
+		}
+
+		cout << "Kopirni konstruktor" << endl;
+	}
+
+	Student& operator = (const Student& p) {
+		if (this != &p) {
+			for (int i = 0; i < predmeti.size(); i++)
+				delete predmeti[i];
+			predmeti.clear();
+			for (int i = 0; i < p.predmeti.size(); i++) {
+				predmeti.push_back(new Predmet);
+				*predmeti[i] = *p.predmeti[i];
+			}
+			cout << "Operator pridruzivanja" << endl;
+		}
+		return *this;
+
+
+	}
+
+	Student(Student&& p) {
+		for (int i = 0; i < p.predmeti.size(); i++) {
+			predmeti.push_back(p.predmeti[i]);
+			p.predmeti[i] = NULL;
+		}
+		cout << "konstruktor prijenosa" << endl;
+	}
+
+
+	Student& operator = (Student&& p) {
+	
+			for (int i = 0; i < predmeti.size(); i++)
+				delete predmeti[i];
+			predmeti.clear();
+			for (int i = 0; i < p.predmeti.size(); i++) {
+				predmeti.push_back(p.predmeti[i]);
+				p.predmeti[i] = NULL;
+			}
+		
+		return *this;
+	}
+
+
+
+	~Student() {
+		for (int i = 0; i < predmeti.size(); i++)
+			delete predmeti[i];
+	}
+};
+
+int main() {
+
+	Student Studentjedan("Ivan", "Ivic");
+	Student Studentdva("Marko", "Markic");
+
+	Studentjedan = Studentdva; // operator pridruzivanja
+
+	Student Studenttri = Studentjedan;	// kopirni konstruktor
+
+	Student Studentcetiri = Student(Studentjedan); // konstruktor prijenosa
+
+	Student Studentpet;
+	Studentpet = Student(Studentdva);  // operator pridruzivanja (prijenos)
+}

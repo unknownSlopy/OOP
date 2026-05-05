@@ -1,0 +1,91 @@
+#include<iostream>
+#include<vector>
+#include<string>
+
+using namespace std;
+
+class Racunalo {
+public:
+	string naziv;
+	string procesor;
+	string memorija;
+};
+
+class Ucionica {
+public:
+
+    Racunalo* racunalo;
+    int brRacunala;
+
+    Ucionica(int _brRacunala, string _naziv, string _procesor, string _memorija) {
+        brRacunala = _brRacunala;
+        racunalo = new Racunalo[brRacunala];
+        for (int i = 0; i < brRacunala; i++) {
+            racunalo[i].naziv = _naziv;
+            racunalo[i].procesor = _procesor;
+            racunalo[i].memorija = _memorija;
+        }
+    }
+
+    Ucionica(const Ucionica& u) {
+        brRacunala = u.brRacunala;
+        racunalo = new Racunalo[u.brRacunala];
+        for (int i = 0; i < u.brRacunala; i++) {
+            racunalo[i].naziv = u.racunalo[i].naziv;
+            racunalo[i].procesor = u.racunalo[i].procesor;
+            racunalo[i].memorija = u.racunalo[i].memorija;
+        }
+    }
+
+    Ucionica& operator = (const Ucionica& u) {
+        if (this != &u) {
+
+            delete[] racunalo;
+
+            brRacunala = u.brRacunala;
+            racunalo = new Racunalo[u.brRacunala];
+            for (int i = 0; i < u.brRacunala; i++) {
+                racunalo[i].naziv = u.racunalo[i].naziv;
+                racunalo[i].procesor = u.racunalo[i].procesor;
+                racunalo[i].memorija = u.racunalo[i].memorija;
+            }
+        }
+        return *this;
+    }
+
+    Ucionica(Ucionica&& u) {
+        brRacunala = u.brRacunala;
+        racunalo = u.racunalo;
+        u.racunalo = NULL;
+        u.brRacunala = 0;
+    }
+
+    Ucionica& operator = (Ucionica&& u) {
+        delete[] racunalo;
+        racunalo = u.racunalo;
+        brRacunala = u.brRacunala;
+        u.racunalo = NULL;
+        u.brRacunala = 0;
+        return *this;
+    }
+
+    ~Ucionica() {
+        delete[] racunalo;
+    }
+};
+
+int main() {
+    // Učionica 'A' s 15 računala istih specifikacija
+    Ucionica A(15, "Koncar", "Intel I5", "4 GB");
+    // Učionica B ima također 15 računala istih specifikacija kao i učionica 'A'
+    Ucionica B = A;
+    cout << B.brRacunala << endl; // 15
+    // Računala iz učionice 'B' se prenose u  učionicu 'C'
+    Ucionica C = move(B);
+    cout << B.brRacunala << endl; // 0
+    // Privremena ucionica se zatvara i njena racunala se prenose u ucionicu 'B'
+    B = Ucionica(15, "Dell", "Intel I7", "8 GB");
+    return 0;
+}
+
+

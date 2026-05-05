@@ -1,0 +1,100 @@
+#include <iostream>
+#include <string>
+#include <vector>
+using namespace std;
+
+class Proizvod {
+private:
+    string naziv;
+    string sifra;
+
+public:
+    void setNaziv(string _naziv) {
+        for (int i = 0; i < _naziv.size(); i++) {
+            _naziv[i] = toupper(_naziv[i]);
+        }
+        naziv = _naziv;
+    }
+
+    void setSifra(string _sifra) {
+        sifra = _sifra;
+    }
+
+    string getNaziv() const {
+        return naziv;
+    }
+
+    string getSifra() const {
+        return sifra;
+    }
+
+};
+
+class Ducan {
+public:
+    string naziv;
+    string adresa;
+    vector<Proizvod*> proizvodi;
+
+    Ducan() {};
+    Ducan(string _naziv, string _adresa) : naziv(_naziv), adresa(_adresa) {};
+
+    Ducan(const Ducan& p) {
+        for (int i = 0; i < p.proizvodi.size(); i++) {
+            proizvodi.push_back(new Proizvod);
+            *proizvodi[i] = *p.proizvodi[i];
+        }
+    }
+
+    Ducan& operator = (const Ducan& p) {
+        if (this != &p) {
+            for (int i = 0; i < proizvodi.size(); i++)
+                delete proizvodi[i];
+            proizvodi.clear();
+            for (int i = 0; i < p.proizvodi.size(); i++) {
+                proizvodi.push_back(new Proizvod);
+                *proizvodi[i] = *p.proizvodi[i];
+            }
+        }
+        return *this;
+    }
+    Ducan(Ducan&& p) {
+        for (int i = 0; i < p.proizvodi.size(); i++) {
+            proizvodi.push_back(p.proizvodi[i]);
+            p.proizvodi[i] = NULL;
+        }
+    }
+
+    Ducan& operator = (Ducan&& p) {
+        for (int i = 0; i < proizvodi.size(); i++)
+            delete proizvodi[i];
+        proizvodi.clear();
+        for (int i = 0; i < p.proizvodi.size(); i++) {
+            proizvodi.push_back(p.proizvodi[i]);
+            p.proizvodi[i] = NULL;
+        }
+        return *this;
+
+    }
+
+    ~Ducan() {
+        for (int i = 0; i < proizvodi.size(); i++)
+            delete proizvodi[i];
+    }
+
+};
+
+int main() {
+
+    Ducan Ducanjedan("Konzum", "Zagreb");
+    Ducan Ducandva("Lidl", "Split");
+
+    Ducanjedan = Ducandva; // operator pridruzivanja
+
+    Ducan Ducantri = Ducanjedan; // kopirni konstruktor
+
+    Ducan Ducancetiri = move(Ducan()); // konstruktor prijenosa
+
+    Ducan Ducanpet;
+    Ducanpet = Ducan(); // operator pridruzivanja (prijenos)
+}

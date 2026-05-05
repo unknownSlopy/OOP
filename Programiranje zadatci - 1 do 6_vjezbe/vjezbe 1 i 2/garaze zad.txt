@@ -1,0 +1,87 @@
+#include<iostream>
+#include<string>
+#include<vector>
+using namespace std;
+
+class Predmet {
+public:
+
+	string naziv;
+	int vrijednost;
+
+	Predmet(string _naziv, int _vrijednost) :
+		naziv(_naziv), vrijednost(_vrijednost) {}
+};
+
+class Garaza {
+public:
+
+	int sirina;
+	int duzina;
+	string lokacija;
+	string vrata;
+	vector<Predmet> vPredmeti;
+
+	Garaza(int _sirina, int _duzina, string _lokacija, string _vrata) :
+		sirina(_sirina), duzina(_duzina), lokacija(_lokacija), vrata(_vrata) {}
+
+	void dodajPredmet(Predmet Predmet) {
+		vPredmeti.push_back(Predmet);
+	}
+
+	void ispisPredmeta() {
+
+		for (int i = 0; i < vPredmeti.size(); i++) {
+			cout << vPredmeti[i].naziv << "(" << vPredmeti[i].vrijednost << ")" << endl;
+		}
+	}
+	
+};
+
+int main() {
+	vector<Garaza> vGaraze;
+	int brojGaraza;
+	cout << "Unesite broj garaža (N):2 " << endl;
+	cin >> brojGaraza;
+	cout << endl;
+
+	for (int i = 0; i < brojGaraza; i++) {
+		int sirina, duzina;
+		string lokacija, vrata;
+		cout << "Unesite velicinu, lokaciju i podatak o vratima za 1. garazu: " << endl;
+		cin >> sirina >> duzina;
+		cin >> lokacija;
+		cin >> vrata;
+
+		vGaraze.push_back(Garaza(sirina, duzina, lokacija, vrata));
+	}
+
+	cout << "Unesite broj predmeta (M): 1" << endl;
+	int brojPredmeta;
+	cin >> brojPredmeta;
+
+	for (int i = 0; i < brojPredmeta; i++) {
+		cout << "Unesite redni broj garaze u koju spada " << brojPredmeta
+			<< ". predmet: " << endl;
+		int redniBroj;
+		cin >> redniBroj;
+
+		cout << "Unesite naziv i vrijednost predmeta: " << endl;
+		int vrijednost;
+		string naziv;
+		cin >> naziv >> vrijednost;
+
+		vGaraze[redniBroj - 1].dodajPredmet(Predmet(naziv, vrijednost));
+	}
+
+	cout << endl << "Ispis garaza i predmeta:" << endl;
+
+	for (int i = 0; i < vGaraze.size(); i++) {
+		cout << i + 1 << vGaraze[i].lokacija << " " << vGaraze[i].sirina << "x" << vGaraze[i].duzina
+			<< " - predmeti: ";
+
+		vGaraze[i].ispisPredmeta();
+		cout << endl;
+	}
+
+}

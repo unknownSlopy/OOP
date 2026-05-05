@@ -1,0 +1,112 @@
+#include<iostream>
+#include<vector>
+#include<string>
+
+using namespace std;
+
+class RestoranIznimka {
+public:
+	string opis() {
+		return "nema mjesta za toliko kuhara";
+	}
+};
+
+class Kuhar {
+private:
+	string ime;
+	int brJela;
+
+public:
+	static int brojac;
+	static int svaJela;
+	Kuhar() {};
+	Kuhar(string _ime, int _brJela) : ime(_ime), brJela(_brJela) {
+		++brojac;
+		svaJela += brJela;
+
+	}
+	string getIme() const {
+		return ime;
+	}
+	int getBrJela() const {
+		return brJela;
+	}
+
+	static int getProsjecnoPripremljenihJela() {
+		return svaJela / brojac;
+	}
+
+};
+
+int Kuhar::brojac = 0;
+int Kuhar::svaJela = 0;
+
+class Restoran {
+public:
+	string naziv;
+	int maxKuhara;
+	vector<Kuhar> vKuhari;
+	friend ostream& operator << (ostream& izlaz, Restoran restoran);
+
+
+	Restoran(string _naziv, int _maxKuhara) : naziv(_naziv), maxKuhara(_maxKuhara) {}
+
+	Restoran& operator += (const Kuhar& k) {
+		vKuhari.push_back(k);
+		if (vKuhari.size() > maxKuhara)
+			throw RestoranIznimka();
+		return *this;
+	}
+
+	operator int() {
+		int ukupanBrojKuhara = vKuhari.size();
+		int ukupanBrojJela = 0;
+		for (int i = 0; i < vKuhari.size(); i++) {
+			ukupanBrojJela += vKuhari[i].getBrJela();
+		}
+		int prosjek = Kuhar::svaJela / ukupanBrojKuhara;
+		return prosjek;
+	}
+};
+
+ostream& operator << (ostream& izlaz, Restoran restoran) {
+	izlaz << "Popis podataka o svim kuharima u restoranu" << endl;
+	for (int i = 0; i < restoran.vKuhari.size(); i++) {
+		izlaz << i + 1 << ". " << restoran.vKuhari[i].getIme() << " " << restoran.vKuhari[i].getBrJela() << endl;
+	}
+	return izlaz;
+}
+
+int main() {
+
+	Restoran italian("Italiano", 2);
+	Kuhar Mario("Mario", 50);
+	Kuhar Luigi("Luigi", 30);
+
+	Restoran restor("Retora", 3);
+	Kuhar Ivan("Ivan", 20);
+	Kuhar Ante("Ante", 10);
+	Kuhar Mile("Mile", 30);
+
+	try {
+		italian += Mario;
+		italian += Luigi;
+		italian += Kuhar("Giovanni", 50);
+
+	}
+
+	catch (RestoranIznimka& iznimka) {
+		cout << iznimka.opis() << endl;
+	}
+
+	restor += Ivan;
+	restor += Ante;
+	restor += Mile;
+
+	cout << (int)italian << endl;
+
+	cout << italian << endl;
+	cout << restor << endl;
+
+	cout << Kuhar::getProsjecnoPripremljenihJela();
+}

@@ -1,0 +1,110 @@
+Napravite klasu TimeSpan koja mjeri protok vremena u satima, minutama i sekundama.
+Dodajte potrebne operatore (+, <, ==, pretvorba) kako bi kod funkcionirao prema očekivanju.
+
+Očekivani ispis:
+11:6:7
+11:43:21
+12:20:35
+21:32:32
+30:44:29
+Ukupno sekundi: 110669
+
+
+int main()
+{
+TimeSpan a(1, 0, 0);
+TimeSpan x(24, 0, 0);
+
+while(a < x)
+{
+if(a == TimeSpan(1,0,0))
+a = a + TimeSpan(10,6,7);
+else if(a < TimeSpan(12,0,0))
+a = a + TimeSpan(0, 37, 14);
+else
+a = a + TimeSpan(9, 11, 57);
+
+cout << a;
+
+}
+
+cout << "Ukupno sekundi: " << (int)a << endl;
+
+return 0;
+}
+
+
+
+Rješenje:
+
+#include<iostream>
+
+using namespace std;
+
+class TimeSpan {
+private:
+	int sati, minute, sekunde;
+
+public:
+	friend ostream& operator << (ostream& izlaz, TimeSpan t);
+	
+	TimeSpan(int _sati, int _minute, int _sekunde) : sati(_sati), minute(_minute), sekunde(_sekunde) {}
+
+	/*TimeSpan operator + (const TimeSpan& t) {
+		int sve_sek = sekunde + t.sekunde + 60 * (minute + t.minute) + 3600 * (sati + t.sati);
+		sati = sve_sek / 3600;
+		minute = (sve_sek % 3600) / 60;
+		sekunde = sve_sek % 60;
+		return TimeSpan(sati, minute, sekunde);
+	}*/
+
+	TimeSpan operator + (const TimeSpan& t) {
+		int sve_sek = sekunde + t.sekunde + 60 * (minute + t.minute) + 3600 * (sati + t.sati);
+		minute = sve_sek / 60;
+		sekunde = sve_sek % 60;
+		sati = minute / 60;
+		minute = minute % 60;
+		return TimeSpan(sati, minute, sekunde);
+	}
+
+	bool operator < (const TimeSpan& t) {
+		return bool(sati < t.sati || minute < t.minute || sekunde < t.sekunde);
+	}
+	
+
+	bool operator == (const TimeSpan& t) {
+		return bool(sati == t.sati && minute == t.minute && sekunde == t.sekunde);
+	}
+
+	operator int() {
+		return sekunde + 60 * minute + 3600 * sati;
+	}
+};
+
+ostream& operator << (ostream& izlaz, TimeSpan t) {
+	izlaz << t.sati << ":" << t.minute << ":" << t.sekunde << endl;
+	return izlaz;
+}
+
+int main()
+{
+	TimeSpan a(1, 0, 0);
+	TimeSpan x(24, 0, 0);
+
+	while (a < x)
+	{
+		if (a == TimeSpan(1, 0, 0))
+			a = a + TimeSpan(10, 6, 7);
+		else if (a < TimeSpan(12, 0, 0))
+			a = a + TimeSpan(0, 37, 14);
+		else
+			a = a + TimeSpan(9, 11, 57);
+
+		cout << a;
+
+	}
+
+	cout << "Ukupno sekundi: " << (int)a << endl;
+
+	return 0;
+}

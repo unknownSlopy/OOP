@@ -1,0 +1,97 @@
+#include<iostream>
+
+using namespace std;
+
+class RazlomakException {
+public:
+	string ispis() {
+		return "nazivnik je jednak nuli";
+	}
+};
+
+class Razlomak {
+private:
+	int brojnik, nazivnik;
+
+public:
+	static int br;
+	Razlomak(int _brojnik, int _nazivnik) : brojnik(_brojnik), nazivnik(_nazivnik) {
+		if (brojnik % nazivnik == 0)
+			br++;
+	}
+	Razlomak(){}
+
+	static int brojac() {
+		return br;
+	}
+
+	void setNazivnik(int n);
+
+	friend Razlomak operator * (Razlomak& r1, Razlomak& r2);
+	friend ostream& operator << (ostream& izlaz, Razlomak r);
+	friend istream& operator >> (istream& ulaz, Razlomak& r);
+
+	Razlomak operator ++(int) {
+		Razlomak pom = *this;
+		brojnik++;
+		nazivnik++;
+		return pom;
+	}
+
+	Razlomak& operator ++() {
+		brojnik++;
+		nazivnik++;
+		return *this;
+	}
+};
+
+Razlomak operator * (Razlomak& r1, Razlomak& r2) {
+	return Razlomak(r1.brojnik * r2.brojnik, r1.nazivnik * r2.nazivnik);
+}
+
+int Razlomak::br = 0;
+
+void Razlomak::setNazivnik(int n) {
+	if (n == 0)
+		throw RazlomakException();
+	nazivnik = n;
+
+}
+
+ostream& operator << (ostream& izlaz, Razlomak r) {
+	izlaz << r.brojnik << "/" << r.nazivnik << endl;
+	return izlaz;
+}
+
+istream& operator >> (istream& ulaz, Razlomak& r) {
+	ulaz >> r.brojnik >> r.nazivnik;
+	return ulaz;
+}
+
+int main() {
+	Razlomak(1, 2);
+	Razlomak(4, 2);
+	Razlomak(10, 2);
+	cout << Razlomak::brojac() << endl;
+
+	try {
+		Razlomak r;
+		r.setNazivnik(0);
+	}
+	catch (RazlomakException& e) {
+		cout << e.ispis() << endl;
+	}
+	catch (...) {
+		cout << "... neka druga greska!";
+	}
+
+	Razlomak r1(2, 3);
+	Razlomak r2(5, 3);
+	Razlomak r3 = r1 * r2;
+	cout << r3 << endl;
+
+	cout << "unesi razlomak: " << endl;
+	Razlomak r4;
+	cin >> r4;
+	cout << r4 << endl;
+}

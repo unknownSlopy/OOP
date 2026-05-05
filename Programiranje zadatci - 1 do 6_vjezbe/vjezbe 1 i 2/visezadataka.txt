@@ -1,0 +1,270 @@
+Vlasnik ste niza garaža u velegradu Zagrebu i iznajmljujete ih za razumnu cijenu, i već vam je pomalo nespretno voditi evidenciju o tome koje sve garaže postoje i tko ima koje ključeve, pa ste se odlučili baciti na posao i napraviti C++ program koji će vam u tome pomoći.
+
+Odlučili ste definirati niz garaža, i u svakoj garaži bilježiti niz ključeva koji su vaši (kako vam ne bi nestali).
+
+Klasa Garaza ima sljedeća svojstva:
+veličinu (širina x duljina)
+cijenu iznajmljivanja
+lokaciju
+niz ključeva koji su vaši
+
+Klasa Kljuc ima sljedeća svojstva:
+ime i prezime osobe kod koje je ključ
+
+U main programu potrebno je od korisnika tražiti unos broja N, nakon kojeg se unose podaci o N garaža. Nakon što se unesu sva polja, potrebno je tražiti unos broja M, koji označava broj ključeva, te je potrebno unijeti tih M ključeva (neka garaža može imati više ključeva).
+Primjer izvođenja:
+
+Unesite broj garaža (N):2
+ Unesite velicinu, lokaciju i cijenu za 1. garazu:
+ 10 20
+ Konavoska 3
+ 500
+ Unesite velicinu, lokaciju i cijenu 2. garazu:
+ 15 25
+ Konavoska 3b
+ 440
+ Unesite broj kljuceva (M): 1
+ Unesite redni broj garaze kojoj pripada 1. kljuc: 2
+ Unesite ime vlasnika kljuca: Ana Anic
+ 
+ Ispis garaza i kljuceva:
+ 1. Konavoska 3 10x20 - kljucevi:
+ 2. Konavoska 3b 15x25 - kljucevi: Ana Anic
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Potrebno je napisati program za evidenciju narudžbi za postolara. Postolar zaprima narudžbe od naručitelja, a svaka narudžba može sadržavati više cipela. Svaka cipela ima veličinu (broj), materijal i boju. Slijedeći programski odsječak u nastavku napišite sve potrebne klase i metode kojima se dobije očekivano ponašanje programskog koda.
+
+ 
+
+int main(){
+
+       Postolar p;
+
+       Narudzba n1;
+
+       n1.narucitelj = "Susjed Mirko";
+
+       //Cipela ima broj (velicinu), materijal i boju
+
+       n1.dodajCipelu(Cipela(47, "Sky", "plava"));
+
+       n1.dodajCipelu(Cipela(44, "Platno", "zelena"));
+
+ 
+
+       //Cijena izrade jedne cipele se racuna na nacin da se velicina (broj cipele) pomnozi sa 10.5
+
+       double c1 = p.preuzmiNarudzbu(n1);
+
+       cout << "Ukupna cijena 1. narudzbe je " << c1 << endl;
+
+ 
+
+       Narudzba n2("Barica");
+
+       n2.dodajCipelu(Cipela(43, "Koza", "crna"));
+
+       double c2 = p.preuzmiNarudzbu(n2);
+
+       cout << "Ukupna cijena 2. narudzbe je " << c2 << endl;
+
+ 
+
+       //Ispisuje sve narudzbe
+
+       //Za svaku narudzbu ispisuje tko je narucitelj, te popis svih cipela koje su narucene
+
+       p.ispisiNarudzbe();
+
+      
+
+}
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Vlasnik ste koncerna za iznajmljivanje pedalina diljem Jadrana. Imate niz lokacija na kojima iznamljujete, te vam je već pomalo nespretno voditi evidenciju o tome gdje su koje pedaline te ste se odlučili baciti na posao i napraviti C++ program koji će vam u tome pomoći.
+
+Odlučili ste definirati niz lokacija gdje iznamljujete, i za svaku lokaciju bilježiti koje pedaline iznamljujete (kako vam ne bi nestale).
+
+Klasa Lokacija ima sljedeća svojstva:
+
+ime i prezime odgovorne osobe
+GPS koordinate (double X i double Y)
+niz predmeta koji su dostupni
+Klasa Pedalina ima sljedeća svojstva:
+
+boja
+kapacitet
+U main programu potrebno je od korisnika tražiti unos broja N, nakon kojeg se unose podaci o N lokacija. Nakon što se unesu sva polja, potrebno je tražiti unos broja M, koji označava broj pedalina, te je potrebno unijeti tih M pedalina (neka lokacija može nuditi više pedalina).
+
+Primjer izvođenja:
+
+Unesite broj lokacija (N):2
+ Unesite odgovornu osobu i GPS koordinate za 1. lokaciju:
+ Pero Jankovic
+ 43.346216 16.734324
+ Unesite odgovornu osobu i GPS koordinate za 2. lokaciju:
+ Danko Stankovic
+ 43.246216 16.834324
+ Unesite broj pedalina (M): 1
+ Unesite redni broj lokacije kojoj pripada 1. pedalina: 2
+ Unesite boju i kapacitet pedaline: Crvena 7
+ 
+ Ispis lokacija i pedalina:
+ 1. 43.346216 16.734324 Pero Jankovic – pedaline:
+2. 43.246216 16.834324 Danko Stankovic – pedaline: Crvena (7)
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Potrebno je napisati program za praćenje bodovnog stanja studenata na određenom kolegiju. Slijedeći programski odsječak u nastavku napišite sve potrebne klase i metode kojima se dobije očekivano ponašanje programskog koda.
+
+ 
+
+int main(){
+
+vector<Bodovi> OOPBodovi{
+
+              Bodovi(Student("Ivana Ivic", "0246002475"), 25),
+
+              Bodovi(Student("Ivica Ivanovic", "0246005654"), 20),
+
+              Bodovi(Student("Marko Markic", "0246004234"), 32)
+
+};
+
+Kolegij OOP("Objektno orijentirano programiranje", OOPBodovi);
+
+ 
+
+/* Preko objekta OOP ispišite bodove svih studenata tog kolegija počevši od   
+
+   onih s najmanjim brojem bodova prema većim. Npr.;
+      
+
+   Objektno orijentirano programiranje bodovi:
+
+   Ivica Ivanovic  0246005654      20
+
+   Ivana Ivic      0246002475      25
+
+   Marko Markic    0246004234      32
+
+*/
+
+return 0;
+
+}
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Vlasnik ste niza plaža na najljepšoj plaži u Pučišću na Braču. Na plažama iznamljujete razne predmete kao što su suncobrani, lopte, stolci i slično, te vam je već pomalo nespretno voditi evidenciju o tome koje sve plaže imate, a pogotovo koji su sve predmeti dostupni na svakoj te ste se odlučili baciti na posao i napraviti C++ program koji će vam u tome pomoći.
+
+Odlučili ste definirati niz plaža, i za svaku plažu bilježiti niz predmeta koje iznamljujete (kako vam ne bi nestali).
+
+Klasa Plaza ima sljedeća svojstva:
+
+veličinu (duljina)
+GPS koordinate (double X i double Y)
+niz predmeta koji su dostupni
+Klasa Predmet ima sljedeća svojstva:
+
+opis
+kolicina
+U main programu potrebno je od korisnika tražiti unos broja N, nakon kojeg se unose podaci o N plaža. Nakon što se unesu sva polja, potrebno je tražiti unos broja M, koji označava broj predmeta, te je potrebno unijeti tih M predmeta (neka plaža može nuditi više predmeta). Kod unosa pripaziti da se GPS lokacija doista odnosi na mjesto u blizini Pučišća.
+
+Primjer izvođenja:
+
+Unesite broj plaža (N):2
+ Unesite velicinu i lokaciju za 1. plazu:
+ 1345
+ 43.346216 16.734324
+ Unesite velicinu i lokaciju za 2. plazu:
+ 2115
+ 43.348236 16.734334
+ Unesite broj predmeta (M): 1
+ Unesite redni broj plaze kojoj pripada 1. predmet: 2
+ Unesite kolicinu i opis predmeta: 19 Lopta
+ 
+ Ispis plaza i predmeta:
+ 1. 43.346216 16.734324 D=1345 - predmeti:
+2. 43.348236 16.734334 D=2115 - predmeti: 19 Lopta
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Potrebno je napisati program za evidenciju igrača u ekipi. Ekipa se sastoji od igrača, a za svakog igrača se evidentira broj na dresu, ime, prezime i trzisna cijena. Potrebno je omogućiti ispis svih igrača u ekipi (naziv ekipe, te popis svih igrača poredano po broju na dresu). Također, potrebno je omogućiti jednostavno dohvaćanje informacija u ukupnoj cijeni svih igrača, najskupljem igraču, te prosječnoj cijeni svih igrača. Slijedeći programski odsječak u nastavku napišite sve potrebne klase i metode kojima se dobije očekivano ponašanje programskog koda.
+
+ 
+
+int main(){
+
+       Ekipa ekipa;
+
+       ekipa.naziv = "Tim raketa";
+
+       Igrac i1("Luka", "Modric");
+
+       i1.broj = 10;
+
+       i1.cijena = 50000000;
+
+       ekipa.dodajIgraca(i1);
+
+       Igrac i2("Mario", "Mandzukic");
+
+       i2.broj = 9;
+
+       i2.cijena = 27000000;
+
+       ekipa.dodajIgraca(i2);
+
+       Igrac i3("Darijo", "Srna");
+
+       i3.broj = 11;
+
+       i3.cijena = 14500000;
+
+       ekipa.dodajIgraca(i3);
+
+ 
+
+       ekipa.ispisi();
+
+ 
+
+       Igrac najskuplji = ekipa.dohvatiNajskupljeg();
+
+       cout << "Najskuplji igrac: ";
+
+       najskuplji.ispisi();
+
+ 
+
+       cout << "Ukupna cijena svih igraca: " << ekipa.ukupnaCijena() << endl;
+
+       cout << "Prosjecna cijena jednog igraca: " << ekipa.prosjecnaCijena() << endl;
+
+}
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Potrebno je napisati program za evidenciju računa. Primjerice, u dućanu svaki kupac ima račun s jedinstvenim rednim brojem, a na tom računu se nalazi popis kupljenih stavki (naziv, količina, jedinična cijena). Slijedeći programski odsječak u nastavku napišite sve potrebne klase i metode kojima se dobije očekivano ponašanje programskog koda.
+
+ 
+
+int main(){
+
+       Kupac Ante(Racun(1)); // Ante ima račun broj 1
+
+       Ante.racun.dodaj(Artikl("Jabuka", 1, 6)); // 1 kg, 6 kn/kg
+
+       Ante.racun.dodaj(Artikl("Banana", 2, 7.5)); // 2 kg, 7.5 kn/kg
+
+       Ante.racun.dodaj(Artikl("Coca cola 2l", 2, 10)); // 2 boce, 10 kn/boca
+
+       cout << "Ukupno: " << Ante.racun.ukupnaCijena << " kn" << endl; // 41 kn
+
+ 
+
+       /* U nastavku ispišite koji je najskuplji artikl kojeg je Ante platio
+
+          (naziv i ukupna cijena). Npr.
+
+      
+
+          Najskuplje placeni artikl je Coca cola 2l (20kn)
+
+       */
+
+       return 0;
+
+}
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------

@@ -1,0 +1,77 @@
+#include <iostream>
+#include <vector>
+#include<string>
+
+using namespace std;
+
+class Cipela {
+public:
+    int velicina;
+    string materijal;
+    string boja;
+
+    Cipela(int _velicina, string _materijal, string _boja)
+        : velicina(_velicina), materijal(_materijal), boja(_boja) {}
+};
+
+class Narudzba {
+public:
+    string narucitelj;
+    vector<Cipela> vCipele;
+
+    Narudzba() = default;
+
+    Narudzba(string _narucitelj) : narucitelj(_narucitelj) {}
+
+    void dodajCipelu(Cipela _cipela) {
+        vCipele.push_back(_cipela);
+    }
+};
+
+class Postolar {
+public:
+    vector<Narudzba> vNarudzbe;
+
+    double preuzmiNarudzbu(Narudzba _narudzba) {
+        vNarudzbe.push_back(_narudzba);
+        double ukupnaCijena = 0.0;
+        for (int i = 0; i < _narudzba.vCipele.size(); i++) {
+            ukupnaCijena += _narudzba.vCipele[i].velicina * 10.5;
+        }
+        return ukupnaCijena;
+    }
+
+    void ispisiNarudzbe() {
+        for (int i = 0; i < vNarudzbe.size(); i++) {
+            cout << "Narucitelj: " << vNarudzbe[i].narucitelj << endl;
+            cout << "Cipele:" << endl;
+            for (int j = 0; j < vNarudzbe[i].vCipele.size(); j++) {
+                cout << "  Velicina: " << vNarudzbe[i].vCipele[j].velicina << ", Materijal: " << vNarudzbe[i].vCipele[j].materijal << ", Boja: " << vNarudzbe[i].vCipele[j].boja << endl;
+            }
+            cout << endl;
+        }
+    }
+};
+
+int main() {
+    Postolar p;
+
+    Narudzba n1;
+    n1.narucitelj = "Susjed Mirko";
+
+    n1.dodajCipelu(Cipela(47, "Sky", "plava"));
+    n1.dodajCipelu(Cipela(44, "Platno", "zelena"));
+
+    double c1 = p.preuzmiNarudzbu(n1);
+    cout << "Ukupna cijena 1. narudzbe je " << c1 << endl;
+
+    Narudzba n2("Barica");
+    n2.dodajCipelu(Cipela(43, "Koza", "crna"));
+
+    double c2 = p.preuzmiNarudzbu(n2);
+    cout << "Ukupna cijena 2. narudzbe je " << c2 << endl;
+
+    p.ispisiNarudzbe();
+
+    return 0;
+}

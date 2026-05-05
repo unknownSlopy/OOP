@@ -1,0 +1,67 @@
+#include<iostream>
+#include<string>
+#include<vector>
+using namespace std;
+
+class Artikl {
+public:
+
+	string naziv;
+	double kolicina = 0.0;
+	double jedinicnaCijena = 0.0;
+	/*double cijena = kolicina * jedinicnaCijena;*/
+	Artikl(string _naziv, double _kolicina, double _jedinicnaCijena) : naziv(_naziv), kolicina(kolicina),
+		jedinicnaCijena(_jedinicnaCijena){}
+};
+
+class Racun {
+public:
+
+	Racun(){}
+	int brojRacuna = 0;
+	vector<Artikl> vArtikli;
+	double ukupnaCijena = 0.0;
+	Racun(int _brojRacuna) : brojRacuna(_brojRacuna) {}
+
+	void dodaj(Artikl _artikl) {
+		vArtikli.push_back(_artikl);
+		ukupnaCijena += (_artikl.kolicina * _artikl.jedinicnaCijena);
+	}
+
+};
+
+class Kupac {
+public:
+	Racun racun;
+	Kupac(Racun _racun) : racun(_racun) {}
+
+
+};
+
+
+int main() {
+
+	Kupac Ante(Racun(1)); // Ante ima racun broj 1
+
+	Ante.racun.dodaj(Artikl("Jabuka", 1, 6)); // 1 kg, 6 kn/kg
+
+	Ante.racun.dodaj(Artikl("Banana", 2, 7.5)); // 2 kg, 7.5 kn/kg
+
+	Ante.racun.dodaj(Artikl("Coca cola 2l", 2, 10)); // 2 boce, 10 kn/boca
+
+	cout << "Ukupno: " << Ante.racun.ukupnaCijena << " kn" << endl;
+
+	string najskuplji_artikl;
+	double najveca_cijena = 0;
+
+	for (int i = 0; i < Ante.racun.vArtikli.size(); i++) {
+		if (Ante.racun.vArtikli[i].kolicina * Ante.racun.vArtikli[i].jedinicnaCijena > najveca_cijena) {
+			najveca_cijena = Ante.racun.vArtikli[i].kolicina * Ante.racun.vArtikli[i].jedinicnaCijena;
+			najskuplji_artikl = Ante.racun.vArtikli[i].naziv;
+		}
+			
+	}
+
+	cout << "Najskuplje placeni artikl je " << najskuplji_artikl << " (" << najveca_cijena << ")" << endl;
+	
+}

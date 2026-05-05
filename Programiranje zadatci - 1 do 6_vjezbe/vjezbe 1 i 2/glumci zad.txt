@@ -1,0 +1,92 @@
+#include <iostream>
+#include <vector>
+#include<algorithm>
+
+using namespace std;
+
+class Glumac {
+public:
+	string ime;
+	string godinaRodjenja;
+	string uloga;
+
+	Glumac(string _ime, string _godinaRodjenja, string _uloga) : ime(_ime), godinaRodjenja(_godinaRodjenja),
+		uloga(_uloga) {}
+
+};
+
+class Epizoda {
+public:
+	vector<Glumac> vGlumci;
+	int redniBroj;
+	int trajanje;
+	
+	void DodajGlumca1(Glumac _glumac);
+	void DodajGlumca2(vector<Glumac> _glumci);
+};
+
+void Epizoda::DodajGlumca1(Glumac _glumac) {
+	vGlumci.push_back(_glumac);
+}
+
+void Epizoda::DodajGlumca2(vector<Glumac> _glumci) {
+	for (int i = 0; i < _glumci.size(); i++) {
+		vGlumci.push_back(_glumci[i]);
+	}
+}
+
+bool usporedba(Epizoda ep1, Epizoda ep2) {
+	if (ep1.trajanje > ep2.trajanje) {
+		return true;
+	}
+	else if(ep1.trajanje == ep2.trajanje) {
+		return ep1.redniBroj < ep2.redniBroj;
+	}
+	else {
+		return false;
+	}
+}
+
+class TVSerija {
+public:
+	vector<Epizoda> vEpizode;
+	string naziv;
+
+	void SortirajEpizode() {
+		sort(vEpizode.begin(), vEpizode.end(), usporedba);
+	}
+};
+
+void AnalizaTVSerije(vector<TVSerija> vSerija, int* ukgl, int* maksgl) {
+	*ukgl = 0;
+	int ukupan_br_glumaca = 0;
+	int maks_glumaca = 0;
+	int index = 0;
+	for (int i = 0; i < vSerija.size(); i++) {
+		for (int j = 0; j < vSerija[i].vEpizode.size(); j++) {
+			*ukgl += vSerija[i].vEpizode[j].vGlumci.size();
+
+			if (vSerija[i].vEpizode[j].vGlumci.size() > maks_glumaca) {
+				maks_glumaca = vSerija[i].vEpizode[j].vGlumci.size();
+				index = i;
+			}
+		}
+	}
+
+	double prosjecan_br_glumaca = ukupan_br_glumaca / vSerija.size();
+	cout << prosjecan_br_glumaca << endl;
+	cout << maks_glumaca;
+
+}
+
+int main() {
+
+	Epizoda epizoda1;
+	epizoda1.DodajGlumca1(Glumac("Ana", "1980", "Glavna uloga"));
+
+	vector<Glumac>glumci = { Glumac("Ivan", "1990", "Sporedna uloga"), 
+		Glumac("Maja", "1985",  "Sporedna uloga") }; 
+
+	Epizoda epizoda2;
+	epizoda2.DodajGlumca2(glumci);
+}

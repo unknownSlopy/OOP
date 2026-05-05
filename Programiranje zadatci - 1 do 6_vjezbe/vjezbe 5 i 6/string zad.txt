@@ -1,0 +1,73 @@
+Ovdje nemam tekst, mislim da je ovo iz zadataka za pripremu 5. vježba na LMS-u
+
+#include<iostream>
+#include<string>
+#include<algorithm>
+
+using namespace std;
+
+class Tekst {
+private:
+    string tekst;
+public:
+    Tekst(const char* _tekst) : tekst(_tekst) {}
+    Tekst(string _tekst) : tekst(_tekst) {}
+    friend ostream& operator << (ostream& izlaz, Tekst t);
+    friend Tekst operator * (int n, Tekst t);
+
+    Tekst operator *(int n) {
+        string novi_tekst;
+        for (int i = 0; i < n; i++) {
+            novi_tekst += tekst;
+        }
+        return Tekst(novi_tekst);
+    }
+
+    Tekst operator +(const Tekst& t) {
+        return Tekst(tekst + t.tekst);
+    }
+
+    Tekst operator - (char c) {
+        remove(tekst.begin(), tekst.end(), c);
+        return Tekst(tekst);
+    }
+
+    /*Tekst operator - (char c) {
+        string novi_tekst;
+        for (int i = 0; i < tekst.size(); i++) {
+            if (tekst[i] != c)
+                novi_tekst += tekst;
+        }
+        return Tekst(novi_tekst);
+    }*/
+};
+
+ostream& operator << (ostream& izlaz, Tekst t) {
+    izlaz << t.tekst << endl;
+    return izlaz;
+}
+
+Tekst operator * (int n, Tekst t) {
+    string novi_tekst;
+    for (int i = 0; i < n; i++) {
+        novi_tekst += t.tekst;
+    }
+    return Tekst(novi_tekst);
+}
+
+int main() {
+    Tekst t = "abc";
+    Tekst p = t * 3;                // "umnozavanje" teksta
+    cout << p << endl;                // ispisuje abcabcabc
+    cout << 2 * t << endl;            // ispisuje abcabc
+
+    // t mora ostati nepromijenjen!!!
+    cout << t << endl;                // ispisuje abc
+
+    cout << t + p << endl;            // ispisuje abcabcabcabc
+    cout << t + p - 'a' << endl;    // ispisuje bcbcbcbc
+
+    // p i t moraju ostati nepromijenjeni!!!
+    cout << p << endl;                // ispisuje abcabcabc
+    cout << t << endl;                // ispisuje abc
+}
