@@ -1,0 +1,44 @@
+#include <iostream>
+#include <vector>
+#include<deque>
+
+using namespace std;
+
+template<typename T>
+class Red {
+public:
+
+    deque<T> podaci;
+    int brElemenata = 0;
+   
+    void Dodaj(const T& element) {
+        podaci.push_back(element);
+        brElemenata++;
+    }
+
+    void Brisi() {
+        podaci.pop_back();
+        brElemenata--;
+    }
+
+    int brojElemenata() const {
+        return brElemenata;
+    }
+
+};
+
+int main() {
+
+    Red<int> red;
+    red.Dodaj(1);
+    red.Dodaj(2);
+    red.Dodaj(3);
+
+    cout << "Broj elemenata u redu: " << red.brojElemenata() << endl;
+
+    red.Brisi();
+
+    cout << "Broj elemenata u redu nakon brisanja: " << red.brojElemenata() << endl;
+
+    return 0;
+}

@@ -1,0 +1,55 @@
+#include <iostream>
+#include <vector>
+#include <string>
+#include <functional>
+
+using namespace std;
+
+class Grad {
+private:
+    string grad;  
+    int populacija;
+    string drzava;
+
+public:
+    Grad(string _grad, int _populacija, string _drzava) : grad(_grad), populacija(_populacija), drzava(_drzava) {};
+
+    string getIme() const {  
+        return grad;
+    }
+
+    int getPopulacija() const {  
+        return populacija;
+    }
+
+    string getDrzava() const {  
+        return drzava;
+    }
+};
+
+vector<Grad*> nadji(vector<Grad>& gradovi, function<bool(Grad*)> kriterij) {
+    vector<Grad*> rezultat;
+    for (int i = 0; i < gradovi.size(); i++) {
+        if (kriterij(&gradovi[i])) {
+            rezultat.push_back(&gradovi[i]);
+        }
+    }
+    return rezultat;
+}
+
+int main() {
+    vector<Grad> v = {
+        Grad("Zagreb", 900000, "Hrvatska"),
+        Grad("Berlin", 2500000, "Njemacka"),
+        Grad("Graz", 1200000, "Austrija"),
+        Grad("Frankfurt", 2300000, "Njemacka")
+    };
+
+    vector<Grad*> r = nadji(v, [](Grad* s) -> bool { return s->getDrzava() == "Njemacka"; });
+
+    for (Grad* p : r) {
+        cout << p->getIme() << " " << p->getPopulacija() << " " << p->getDrzava() << endl;
+    }
+
+    return 0;
+}

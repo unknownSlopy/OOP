@@ -1,0 +1,42 @@
+Ovdje je bio ponuđen samo main kod pa je trebalo napravit zadatak po tome.
+
+
+#include<iostream>
+
+using namespace std;
+
+class Matematika {
+public:
+
+	Matematika(){}
+
+	template<class T1, class T2>
+	auto suma(T1 a, T2 b){
+		return a + b;
+	}
+};
+
+class Kompleksni {
+public:
+
+	double re, im;
+	Kompleksni(double _re, double _im) : re(_re), im(_im) {}
+
+	Kompleksni operator + (double n) {
+		return Kompleksni(re + n, im);
+	}
+};
+
+ostream& operator << (ostream& izlaz, const Kompleksni& Z) {
+	izlaz << Z.re << " + " << Z.im << endl;
+	return izlaz;
+}
+
+int main() {
+
+	Matematika Racun;
+	cout << Racun.suma(2, 4.3) << endl;
+	cout << Racun.suma(2.3, 4) << endl;
+	cout << Racun.suma(Kompleksni(2.5, 1), 4) << endl;
+	return 0;
+}

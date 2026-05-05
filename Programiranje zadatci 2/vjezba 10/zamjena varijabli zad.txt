@@ -1,0 +1,22 @@
+Ovdje je trebalo napravit lambda funkciju koja će zamijenit dvije varijable.
+
+#include<iostream>
+
+using namespace std;
+
+int main() {
+
+	int a = 10;
+	int b = 99;
+
+	[](int& x, int& y) {
+
+		int temp = x;
+		x = y;
+		y = temp;
+	}(a, b);
+
+	cout << "Nakon zamjene: " << a << "  " << b << endl;
+
+	return 0;
+}

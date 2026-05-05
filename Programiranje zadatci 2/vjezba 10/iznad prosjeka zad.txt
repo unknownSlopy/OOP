@@ -1,0 +1,34 @@
+#include<vector>
+#include<iostream>
+
+using namespace std;
+
+template<class T>
+auto suma(vector<T>& v) {
+	T sum = 0;
+	for (int i = 0; i < v.size(); i++) {
+		sum += v[i];
+	}
+	return sum;
+}
+
+template<class T>
+auto iznadProsjeka(vector<T>& v) {
+
+	T prosjek = suma(v) / v.size();
+
+	vector<T> iznad_prosjeka;
+
+	for (int i = 0; i < v.size(); i++) {
+		if (v[i] > prosjek) {
+			iznad_prosjeka.push_back(v[i]);
+		}
+	}
+
+	return iznad_prosjeka;
+}
+
+int main() {
+
+	return 0;
+}

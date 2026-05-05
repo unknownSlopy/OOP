@@ -1,0 +1,118 @@
+Potrebno je napisati sve klase kako bi donji programski odsječak radio, uz ispravno modeliranje nasljeđivanja i polimorfizma.
+Dodatno, potrebno je u klasi proizvod napraviti čistu virtualnu funkciju getKoefKvalitete() i pomoću nje pronaći koji proizvod iz vektora ima
+najveći koeficijent kvalitete.
+
+Za automobil, koeficijent se računa kao: 1.0 / (2015 - GOD_PROIZVODNJE) * maxBrzina / 100.0 * cijena / 100000.0;
+Za lego igračku, računa se kao: brKomada / cijena.
+
+int main()
+{
+vector<Proizvod*> vp = {
+new LegoIgracka("Star Wars - Millenium Falcon", 2250.99, 756), //1. parametar = naziv, 2. parametar = cijena, 3. parametar = br. komada
+new Automobil("BMW", 51230, 2013, 207.34), //1. parametar = naziv, 2. parametar = cijena, 3. parametar = god. proizvodnje, 4. parametar = max brzina
+new LegoIgracka("Vlakic na upravljanje", 1750.99, 877),
+new Automobil("Yugo 45", 14500, 1988, 127.88),
+};
+
+for (int i = 0; i < 4; i++){
+vp[i]->print();
+}
+
+/*
+Dodati kod za pronalazak proizvoda s najvećim koeficijentom i ispis tog proizvoda i odgovarajućeg koeficijenta.
+*/
+
+return 0;
+}
+
+
+Rješenje:
+
+#include<iostream>
+#include<vector>
+#include<string>
+
+using namespace std;
+
+class Proizvod {
+protected:
+	string naziv;
+	double cijena = 0;
+
+public:
+
+	virtual double getKoefKvalitete() const = 0;
+	virtual void print() = 0;
+
+	Proizvod(string _naziv, double _cijena) : naziv(_naziv), cijena(_cijena) {}
+};
+
+class LegoIgracka : public Proizvod {
+public:
+
+	int brKomada = 0;
+
+	LegoIgracka(string naziv, double cijena, int _brKomada) : Proizvod(naziv, cijena), brKomada(_brKomada){}
+
+	void print()  override {
+		cout << "Lego igracka: " << naziv << ", Cijena: " << cijena << ", Broj komada: " << brKomada << endl;
+	}
+
+	double getKoefKvalitete() const override {
+		return brKomada / cijena;
+	}
+};
+
+class Automobil : public Proizvod {
+public:
+
+	int godProizvodnje;
+	double maxBrzina = 0;
+
+	Automobil(string naziv, double cijena, int _godProizvodnje, double _maxBrzina) : 
+		Proizvod(naziv, cijena), godProizvodnje(_godProizvodnje), maxBrzina(_maxBrzina) {}
+
+	void print() override {
+		cout << "Automobil: " << naziv << ", Cijena: " << cijena << ", Godina proizvodnje: " << godProizvodnje
+			<< ", Max brzina: " << maxBrzina << endl;
+	}
+
+	double getKoefKvalitete() const override {
+		return 1.0 / (2015 - godProizvodnje) * maxBrzina / 100.0 * cijena / 100000.0;
+	}
+};
+
+int main()
+{
+	vector<Proizvod*> vp = {
+	new LegoIgracka("Star Wars - Millenium Falcon", 2250.99, 756), //1. parametar = naziv, 2. parametar = cijena, 3. parametar = br. komada
+	new Automobil("BMW", 51230, 2013, 207.34), //1. parametar = naziv, 2. parametar = cijena, 3. parametar = god. proizvodnje, 4. parametar = max brzina
+	new LegoIgracka("Vlakic na upravljanje", 1750.99, 877),
+	new Automobil("Yugo 45", 14500, 1988, 127.88),
+	};
+
+	for (int i = 0; i < 4; i++) {
+		vp[i]->print();
+	}
+
+	double maxKoef = -1.0;
+	Proizvod* najkvalitetnijiProizvod = nullptr;
+
+	for (int i = 0; i < vp.size(); i++) {
+		double koef = vp[i]->getKoefKvalitete();
+		if (koef > maxKoef) {
+			maxKoef = koef;
+			najkvalitetnijiProizvod = vp[i];
+		}
+	}
+
+	cout << "\nProizvod s najvecim koeficijentom kvalitete:\n";
+	najkvalitetnijiProizvod->print();
+	cout << "Koeficijent kvalitete: " << maxKoef << endl;
+
+	for (int i = 0; i < vp.size(); i++) {
+        delete vp[i];
+    }
+
+	return 0;
+}

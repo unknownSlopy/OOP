@@ -1,0 +1,85 @@
+Potrebno je nadopuniti donji programski odsječak na način da napišete funkciju "izdvoji", za koju vrijedi sljedeće:
+
+vraća vector<int> (novi vektor)
+prvi argument: vector<int>&
+drugi argument: funkcija
+Funkcija izdvoji mora iz vektora "brojevi" izdvojiti samo one koji su djeljivi s 3. Drugi argument funkcije potrebno je poslati kao lambda izraz (nadopuniti).
+
+int main()
+{
+vector<int> brojevi = {1, 4, 5, 7, 3, 6, 12, 65, 32, 8, 87, 55, 23, 22, 1, 1, 433, 66, 7, 433, 3, 32, 76, 8, 72, 256, 42};
+
+vector<int> rez = izdvoji(brojevi, /*lambda izraz*/);
+
+for (int i = 0; i < rez.size(); i++)
+cout << rez[i] << " ";
+//ispis: 3 6 12 87 66 3 72 42
+
+}
+
+Rješenje više nekih načina:
+
+#include<iostream>
+#include<vector>
+#include<functional>
+
+using namespace std;
+
+vector<int> izdvoji(vector<int>& brojevi, function<bool(int)> uvjet = [](int n){ return true; }) {
+
+	vector<int> rezultat;
+
+	for (int i = 0; i < brojevi.size(); i++) {
+		if (uvjet(brojevi[i]))
+			rezultat.push_back(brojevi[i]);
+	}
+
+	return rezultat;
+}
+
+bool isParan(int n) {
+	return !(n % 2);
+}
+
+class cNeparan {
+public:
+
+	bool operator()(int n) {
+		return n % 2;
+	}
+};
+
+int main() {
+
+	vector<int> brojevi = { 1, 4, 5, 7, 3, 6, 12, 65, 32, 8, 87, 55, 23, 22, 1, 1, 433, 66, 7, 433, 3, 32, 76, 8, 72, 256, 42 };
+
+	vector<int> rez = izdvoji(brojevi, [](int broj){
+		return broj % 3 == 0;
+		});
+
+	vector<int> rez2 = izdvoji(brojevi);
+
+	vector<int> rez3 = izdvoji(brojevi, isParan);
+
+	vector<int> rez4 = izdvoji(brojevi, cNeparan());
+
+	for (int i = 0; i < rez.size(); i++)
+		cout << rez[i] << " ";
+
+	cout << endl;
+
+	for (int i = 0; i < rez2.size(); i++)
+		cout << rez2[i] << " ";
+	//ispis: 3 6 12 87 66 3 72 42
+
+	cout << endl;
+
+	for (int i = 0; i < rez3.size(); i++)
+		cout << rez3[i] << " ";
+
+	cout << endl;
+
+	for (int i = 0; i < rez4.size(); i++)
+		cout << rez4[i] << " ";
+}
+

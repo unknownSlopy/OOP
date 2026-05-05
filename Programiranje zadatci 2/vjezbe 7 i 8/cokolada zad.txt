@@ -1,0 +1,108 @@
+#include<iostream>
+#include<vector>
+#include<string>
+
+using namespace std;
+
+class Cokolada {
+public:
+
+	string naziv;
+
+	Cokolada(string _naziv): naziv(_naziv){}
+
+	virtual double getCijena() = 0;
+
+	int GetTezina() {
+		return 80;
+	}
+
+	virtual ~Cokolada() {
+		cout << "Destruktor Cokolada" << endl;
+	}
+};
+
+class Mlijecna : public Cokolada {
+public:
+
+	Mlijecna(string naziv): Cokolada(naziv){}
+
+	double getCijena() override {
+		return 6.5;
+	}
+
+	int GetTezina() {
+		return 200;
+	}
+
+	 ~Mlijecna() {
+		cout << "Destruktor Mlijecna" << endl;
+	}
+};
+
+class Crna : public Cokolada {
+public:
+
+	Crna(string naziv) : Cokolada(naziv) {}
+
+	double getCijena() override {
+		return 7;
+	}
+
+	int GetTezina() {
+		return 100;
+	}
+
+
+};
+
+class CrnaBrusnica : public Crna {
+public:
+
+	CrnaBrusnica(string naziv) : Crna(naziv) {}
+
+	double getCijena() override {
+		return 8;
+	}
+
+	int GetTezina() {
+		return 80;
+	}
+
+};
+
+double ProsjecnaCijena(vector<Cokolada*> tvornica) {
+
+	double ukupno = 0;
+	for (int i = 0; i < tvornica.size(); i++) {
+		Cokolada* c = tvornica[i];
+		ukupno += c->getCijena();
+	}
+
+	return ukupno;
+	
+}
+
+
+int main() {
+
+	Mlijecna jedan("Milka");
+	Crna dva("Kinder");
+	CrnaBrusnica tri("Brusn");
+
+
+	cout << "Tezina Milka cokolade: " << jedan.GetTezina() << endl;
+	cout << "Tezina Kinder cokolade: " << dva.GetTezina() << endl;
+	cout << "Tezina Brusn cokolade: " << tri.GetTezina() << endl;
+
+	vector<Cokolada*> tvornica = { &jedan , &dva, &tri };
+
+	cout << "Prosjecna cijena cokolada: " << ProsjecnaCijena(tvornica) << endl;
+
+	Cokolada* c = new Mlijecna ("Dorina");
+
+	delete c;
+
+	return 0;
+
+}
